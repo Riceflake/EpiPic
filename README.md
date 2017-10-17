@@ -29,4 +29,4 @@ Will delete the picture with the matching id.
 Screenshots
 -----------
 
-<img src="https://imgur.com/a/PmOo5.png" width="250">
+<img src="https://imgur.com/hrH9fZ6.png" width="250">
