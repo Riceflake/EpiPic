@@ -8,8 +8,8 @@ endpoints to manage (browse, add, delete) photos. The front end is responsible f
 Pre-requisites
 --------------
 
-NodeJS 7.9.0
-Yarn 0.24.6
+- NodeJS 7.9.0
+- Yarn 0.24.6
 
 API Requests
 -----------------
