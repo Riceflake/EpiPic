@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <style>
+        .flex-container {
+          padding: 0;
+          margin: 0;
+          list-style: none;
+          display: -webkit-box;
+          display: -moz-box;
+          display: -ms-flexbox;
+          display: -webkit-flex;
+          display: flex;
+          -webkit-flex-flow: row wrap;
+          justify-content: space-around;
+        }
+        
+        .flex-container > div {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+        }
+        
+        .div-center {
+            text-align: center;
+        }
+        
+        .padding-top-navbar {
+            padding-top: 75px;
+        }
+        
+    
+        
+    </style>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+  <a class="navbar-brand" href="#">Epipic</a>
+
+  <ul class="nav navbar-nav">
+    <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input id="link-image" type="text" class="form-control" placeholder="Image link">
+        </div>
+        <button id="add-image" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span></button>
+    </form>
+  </ul>
+</div>
+<div id="pictures" class="flex-container padding-top-navbar"></div>
+<div class="div-center padding-top-navbar"><button id="show-more" type="button" class="btn btn-secondary btn-lg">Show more</button></div>
+    
+<script>
+    var add_image = document.getElementById('add-image');
+    add_image.addEventListener("click", function(){
+        var link = document.getElementById('link-image').value;
+        var id = this.lastChild.id;
+        fetch('/api/pictures/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            picture: link
+          })
+        }).then(function() {
+            console.log("ok");
+        }).catch(function() {
+            console.log("Something bad happen");
+        });
+        
+    });
+</script>
+
+<script>
+    function checkStatus(response) {
+      if (response.status >= 200 && response.status < 300) {
+        return response
+      } else {
+        var error = new Error(response.statusText)
+        error.response = response
+        throw error
+      }
+    }
+
+    function parseJSON(response) {
+      return response.json()
+    }
+    
+    function createButton(message) {
+        let button = document.createElement('div');
+        button.type = "button"; 
+        button.classList.add("btn");
+        button.classList.add("btn-danger");
+        button.innerHTML = message;
+        return button;
+    }
+    
+    function deleteElement()
+    {
+         var id = this.lastChild.id;
+         fetch('/api/pictures/' + id)
+          .then(function(response) {
+            return response.text()
+          }).then(function(body) {
+            //document.body.innerHTML = body
+            //console.log(response.text());
+            location.reload();
+          })
+    }
+    
+    var cursor = 0;
+    
+    function addImages(offset)
+    {
+        const container = document.getElementById('pictures');
+        fetch('/api/pictures?cursor=' + cursor + '&amount=' + offset)
+          .then(checkStatus)
+          .then(parseJSON)
+          .then(function(data) {
+            var pictures = data;
+            return data.map(function(picture) { 
+                var div = document.createElement('div'); 
+                var img = document.createElement('img');
+                //var span = document.createElement('span');
+                var deleteButton = createButton("Delete index : " + picture.index);
+                
+                var hiddenId = document.createElement('div');
+                hiddenId.id = picture.index;
+                
+                deleteButton.addEventListener("click", deleteElement, false);
+                img.src = picture.picture;
+                //span.innerHTML = picture.index;
+                div.append(img);
+                //div.append(span);
+                deleteButton.append(hiddenId);
+                div.append(deleteButton);
+                                        
+                
+                container.append(div);
+            })
+          }).catch(function(error) {
+            console.log('request failed', error)
+          })
+        cursor += offset;
+    }
+    
+</script>
+<script>
+    var sm = document.getElementById('show-more');
+    sm.addEventListener("click", function(){
+        addImages(20);
+});
+</script>
+</body>
+</html>

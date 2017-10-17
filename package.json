@@ -1,0 +1,17 @@
+{
+  "name": "epipic-package",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "zhang_f",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-minify": "^0.2.0",
+    "nodemon": "^1.11.0",
+    "valid-url": "^1.0.9"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
