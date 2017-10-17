@@ -10,6 +10,7 @@ Pre-requisites
 
 - NodeJS 7.9.0
 - Yarn 0.24.6
+- Express 4.15.2
 
 API Requests
 -----------------
