@@ -5,6 +5,12 @@ EpiPic is a simple Photo collection app, It will be composed of two distinct par
 endpoints to manage (browse, add, delete) photos. The front end is responsible for displaying it.
 
 
+Pre-requisites
+--------------
+
+NodeJS 7.9.0
+Yarn 0.24.6
+
 API Requests
 -----------------
 
